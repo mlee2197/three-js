@@ -1,34 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React, { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import styled from "styled-components";
+
+import "./App.css";
+import { Box, AnimatedSphere, StandardSphere, ShinRamyun } from "./components";
+
+import { OrbitControls } from "@react-three/drei";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  //create an additional canvas to separate 3d objects
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Using Three.js</h1>
+      <p>Adding another dimension to web development.</p>
+      <Flex>
+        <Canvas>
+          <OrbitControls enableZoom={false} autoRotate />
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[-2, 5, 2]} intensity={1} />
+          {/* <directionalLight position={[1, -5, 0]} intensity={1} /> */}
+          <Suspense fallback={null}>
+            <Box />
+            <StandardSphere />
+          </Suspense>
+        </Canvas>
+        <Canvas>
+          <OrbitControls enableZoom={false} autoRotate />
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[-2, 5, 2]} intensity={0.5} />
+          <Suspense fallback={null}>
+            <ShinRamyun />
+          </Suspense>
+        </Canvas>
+        <Canvas>
+          <OrbitControls enableZoom={false} />
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[3, 4, 3]} intensity={1} />
+          <Suspense fallback={null}>
+            <AnimatedSphere />
+          </Suspense>
+        </Canvas>
+      </Flex>
     </div>
-  )
+  );
 }
 
-export default App
+const Flex = styled.div`
+  display: flex;
+  margin-top: 64px;
+`;
+
+export default App;
